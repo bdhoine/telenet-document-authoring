@@ -1,0 +1,121 @@
+footer {
+  background-color: var(--tn-black);
+  color: var(--tn-white);
+  font-family: var(--tn-font-body);
+}
+
+footer .footer-inner {
+  box-sizing: border-box;
+  max-width: var(--tn-content-width);
+  margin-inline: auto;
+  padding: 64px 24px 28px;
+}
+
+/* ---------- link columns ---------- */
+footer .footer-columns > ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer .footer-column {
+  margin: 0;
+}
+
+footer .footer-title {
+  margin: 0 0 20px;
+  font-family: var(--tn-font-heading);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+footer .footer-column ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer .footer-column li {
+  margin: 0 0 12px;
+  line-height: 1.25;
+}
+
+footer .footer-column a {
+  color: var(--tn-white);
+  font-size: 16px;
+  line-height: 1.25;
+  text-decoration: none;
+}
+
+footer .footer-column a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- "Vind ons ook op" ---------- */
+footer .footer-social {
+  margin-top: 32px;
+}
+
+footer .footer-social p {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* ---------- legal links ---------- */
+footer .footer-legal {
+  margin-top: 40px;
+}
+
+footer .footer-legal p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 0;
+}
+
+footer .footer-legal a {
+  color: var(--tn-white);
+  font-size: 16px;
+  text-decoration: none;
+}
+
+footer .footer-legal a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- copyright ---------- */
+footer .footer-copyright {
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+footer .footer-copyright p {
+  margin: 0;
+}
+
+/* hairline rule below the copyright, matching telenet.be */
+footer .footer-copyright::after {
+  content: "";
+  display: block;
+  margin-top: 24px;
+  border-top: 1px solid rgb(255 255 255 / 15%);
+}
+
+@media (width <= 900px) {
+  footer .footer-columns > ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+  }
+}
+
+@media (width <= 600px) {
+  footer .footer-columns > ul {
+    grid-template-columns: 1fr;
+  }
+}

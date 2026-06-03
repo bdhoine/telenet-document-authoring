@@ -8,6 +8,7 @@ import {
   loadSections,
   loadCSS,
   loadHeader,
+  loadFooter,
 } from './aem.js';
 
 /**
@@ -136,6 +137,7 @@ async function loadLazy(doc) {
   await loadSections(main);
 
   loadHeader(doc.querySelector('header'));
+  loadFooter(doc.querySelector('footer'));
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;

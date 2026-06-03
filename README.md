@@ -29,8 +29,8 @@ this repo holds the code (blocks, scripts, styles) and an edge worker.
 ## Project structure
 
 ```
-blocks/<name>/<name>.{js,css}   Blocks: banner, card, columns, fragment,
-                                 usp, promo, device, links
+blocks/<name>/<name>.{js,css}   Blocks: header, footer, banner, card,
+                                 columns, fragment, usp, promo, device, links
 scripts/aem.js                  EDS core library (vendored)
 scripts/scripts.js              Project entry: decorateMain, eager/lazy/delayed
 scripts/delayed.js              Deferred work
@@ -47,6 +47,8 @@ Each block is a folder with a `<name>.js` (default-exports `decorate(block)`) an
 a `<name>.css`. `aem.js` loads a block by its first class name when it appears in
 authored content — no registration needed. Several blocks have variants:
 
+- **header** / **footer** — render the `/fragments/nav/header` and
+  `/fragments/nav/footer` fragments (loaded in the lazy phase)
 - **card** — link-list, accent (yellow), media (leading image), and `wide`
 - **promo** — `dark` and `accent` themes
 - **columns**, **banner**, **usp**, **device**, **links**, **fragment**
