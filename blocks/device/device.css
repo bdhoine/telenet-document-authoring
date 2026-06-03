@@ -2,18 +2,21 @@
   box-sizing: border-box;
   max-width: 280px;
   margin: 16px auto;
-  padding: 20px;
-  border-radius: var(--tn-radius);
-  background-color: var(--tn-white);
   text-align: center;
 }
 
-/* the border belongs on the product image, not the whole card */
+/* the card chrome belongs on the product image, not the whole tile */
 .device picture img {
   width: 100%;
   height: auto;
   border: 1px solid var(--tn-border-color);
-  border-radius: var(--tn-radius-sm);
+  border-radius: 16px;
+  background-color: var(--tn-white);
+}
+
+.device picture {
+  display: block;
+  margin-bottom: 24px;
 }
 
 .device p {
@@ -21,22 +24,21 @@
 }
 
 .device-name {
-  font-family: var(--tn-font-heading);
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 400;
 }
 
 .device-name a {
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .device-price {
   margin-top: 12px;
-  font-family: var(--tn-font-heading);
 }
 
 .device-price strong {
-  font-size: 26px;
+  font-size: 18px;
 }
 
 .device-old {

@@ -14,36 +14,45 @@
 }
 
 .usp-content h2 {
-  margin: 0 0 24px;
+  max-width: 620px;
+  margin: 0 0 32px;
 }
 
+/* icon column (48px) next to a text column: title + body (telenet.be) */
 .usp-item {
-  margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  column-gap: 16px;
+  margin-bottom: 32px;
 }
 
-.usp-item p:first-child {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.usp-icon {
+  grid-row: 1 / span 2;
+  align-self: start;
+}
+
+.usp-icon img {
+  width: 48px;
+  height: 48px;
+}
+
+.usp-item p {
+  grid-column: 2;
+  margin: 0;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.usp-item p:first-of-type {
   margin: 0 0 4px;
   font-family: var(--tn-font-heading);
-  font-size: 22px;
+  font-size: 32px;
   font-weight: 400;
-}
-
-.usp-item p:first-child picture,
-.usp-item p:first-child img {
-  width: 32px;
-  height: auto;
-}
-
-/* body aligns under the title, to the right of the icon */
-.usp-item p:last-child {
-  margin: 0 0 0 calc(32px + var(--tn-space-s));
+  line-height: 32px;
 }
 
 .usp-cta {
-  margin-top: 8px;
+  margin-top: 0;
 }
 
 /* the USP CTA has no chevron marker */
@@ -53,6 +62,7 @@
 
 @media (width >= 900px) {
   .usp {
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: 340px 1fr;
+    column-gap: 53px;
   }
 }

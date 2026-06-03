@@ -40,7 +40,7 @@
   --tn-black-hover: #2e2d2c;    /* button hover (matches telenet.be) */
   --tn-white: #fff;
   --tn-bg: #fafaf8;             /* warm off-white page background */
-  --tn-shaded: #f0f0ee;         /* gray band background */
+  --tn-shaded: #f0eeeb;         /* gray band background */
   --tn-text: #000;
 
   /* fonts */
@@ -54,13 +54,13 @@
   --tn-space-l: 32px;
 
   /* layout & shape */
-  --tn-content-width: 1200px;
-  --tn-radius: 20px;
+  --tn-content-width: 1128px;
+  --tn-radius: 24px;
   --tn-radius-btn: 12px;
   --tn-radius-sm: 8px;
   --tn-shadow: 0 8px 24px rgb(0 0 0 / 8%);
   --tn-border-color: rgb(0 0 0 / 10%);
-  --tn-chevron-size: 28px;
+  --tn-chevron-size: 24px;
   --tn-transition: 0.15s ease;
 }
 
@@ -117,13 +117,13 @@ a.button,
   display: inline-flex;
   align-items: center;
   gap: var(--tn-space-s);
-  padding: 12px 20px 12px 12px;
+  padding: 10px 12px;
   border: 0;
   border-radius: var(--tn-radius-btn);
   background-color: var(--tn-black);
   color: var(--tn-white);
   font-family: var(--tn-font-heading);
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
   line-height: 1;
   text-decoration: none;
@@ -147,7 +147,7 @@ a.button,
   background-color: var(--tn-yellow);
   color: var(--tn-black);
   font-family: var(--tn-font-heading);
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 900;
   line-height: 1;
 }
@@ -203,6 +203,11 @@ main > .section > div {
 main > .section > div:has(> .banner) {
   max-width: none;
   padding-inline: 0;
+}
+
+/* the hero banner sits flush against the top of the page */
+main > .section.banner-container {
+  padding-block: 0;
 }
 
 /* default (non-block) content is centered, like the Telenet section intros */
@@ -264,7 +269,7 @@ main > .section[class~="2-columns"],
 main > .section[class~="3-columns"],
 main > .section[class~="4-columns"] {
   display: grid;
-  gap: var(--tn-space-l);
+  gap: var(--tn-space-m);
   align-items: stretch;
   max-width: var(--tn-content-width);
   margin-inline: auto;

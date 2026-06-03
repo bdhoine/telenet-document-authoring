@@ -1,9 +1,10 @@
 .banner {
   position: relative;
   display: flex;
-  align-items: center;
-  min-height: 360px;
-  padding-block: 56px;
+  align-items: flex-start;
+  box-sizing: border-box;
+  min-height: 388px;
+  padding-block: 48px;
   overflow: hidden;
 
   /* white surface so the curved bottom edge reads full-width against the
@@ -41,7 +42,7 @@
 }
 
 .banner-content h1 {
-  margin: 0 0 28px;
+  margin: 0 0 32px;
   font-size: clamp(40px, 7vw, 76px);
   line-height: 1;
 }
@@ -51,10 +52,6 @@
 }
 
 @media (width >= 900px) {
-  .banner {
-    padding-block: 72px;
-  }
-
   /* heading occupies two-thirds of the banner, leaving room for the artwork */
   .banner-content h1 {
     max-width: 66%;

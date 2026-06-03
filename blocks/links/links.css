@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 48px;
+  gap: 120px;
 }
 
 .links-item {
@@ -20,6 +20,6 @@
 }
 
 .links-item a {
-  font-family: var(--tn-font-heading);
-  font-size: 20px;
+  font-size: 18px;
+  text-underline-offset: 3px;
 }

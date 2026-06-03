@@ -24,6 +24,15 @@ export default function decorate(block) {
       media.append(cell);
     } else {
       cell.classList.add('usp-item');
+      // pull the icon out of the title paragraph so the item can lay out as
+      // an icon column next to a text column (title + body)
+      const icon = cell.querySelector('p:first-child picture');
+      if (icon) {
+        const iconWrap = document.createElement('div');
+        iconWrap.className = 'usp-icon';
+        iconWrap.append(icon);
+        cell.prepend(iconWrap);
+      }
       content.append(cell);
     }
   });

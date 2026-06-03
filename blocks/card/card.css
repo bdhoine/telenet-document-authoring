@@ -1,7 +1,7 @@
 .card {
   box-sizing: border-box;
   margin-block: 16px;
-  padding: 32px;
+  padding: 24px;
   border-radius: var(--tn-radius);
   background-color: var(--tn-white);
   box-shadow: var(--tn-shadow);
@@ -13,6 +13,19 @@
 .card h3 {
   margin: 0 0 12px;
   font-size: 40px;
+  line-height: 1;
+}
+
+/* media card headings are a step smaller (telenet.be) */
+.card-media h3 {
+  font-size: 32px;
+}
+
+/* link-list card title ("Wat zoek je?") */
+.card-list > div > div > p:first-child {
+  font-family: var(--tn-font-heading);
+  font-size: 24px;
+  line-height: 1;
 }
 
 .card p {
@@ -36,7 +49,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: 52px;
+  min-height: 44px;
   padding-inline: 24px;
 }
 
@@ -63,9 +76,9 @@
 /* link layout; the chevron marker comes from the shared .tn-chevron rule */
 .card-list li a {
   display: block;
-  padding: 14px 0;
-  font-family: var(--tn-font-heading);
-  font-size: 20px;
+  padding: 12px 0;
+  font-size: 16px;
+  line-height: 24px;
   text-decoration: none;
 }
 
@@ -73,7 +86,7 @@
    covers only the text, not the chevron */
 .card-list li a::before {
   display: inline-grid;
-  margin-right: var(--tn-space-s);
+  margin-right: 16px;
   vertical-align: middle;
 }
 
@@ -100,30 +113,39 @@
 
 /* wide card (full-width): icon + title + body on the left, CTA on the right */
 .card.wide {
-  padding-inline: 48px;
+  padding: 40px 48px;
 }
 
 .card.wide > div > div {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr auto;
   column-gap: var(--tn-space-l);
   align-items: center;
+
+  /* room for the icon, which is absolutely centered over both text lines */
+  padding-left: 88px;
 }
 
 .card.wide .card-figure {
-  display: flex;
-  align-items: center;
-  gap: var(--tn-space-s);
   grid-column: 1;
-  margin: 0 0 8px;
+  margin: 0 0 4px;
   font-family: var(--tn-font-heading);
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
+  line-height: 1;
+}
+
+.card.wide .card-figure picture {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  line-height: 0;
 }
 
 .card.wide .card-figure img {
-  flex: none;
-  width: 64px;
+  width: 72px;
   height: auto;
   border-radius: 0;
 }
@@ -131,7 +153,9 @@
 /* body aligns under the title, to the right of the icon */
 .card.wide .card-figure + p {
   grid-column: 1;
-  margin: 0 0 0 calc(64px + var(--tn-space-s));
+  margin: 0;
+  font-size: 18px;
+  line-height: 28px;
 }
 
 .card.wide .button-wrapper {
@@ -139,10 +163,6 @@
   grid-row: 1 / -1;
   align-self: center;
   margin: 0;
-}
-
-.card.wide .button {
-  padding: 12px 28px;
 }
 
 @media (width <= 600px) {
