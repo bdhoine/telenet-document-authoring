@@ -667,6 +667,33 @@ async function loadSections(element) {
   }
 }
 
+/**
+ * Fetches the site's placeholders sheet and returns a key/value map.
+ * Each key is exposed verbatim (so `{{key}}` tokens can be matched literally)
+ * and as camelCase (for programmatic access, e.g. `placeholders.customerZone`).
+ * The result is cached per prefix on `window.placeholders`.
+ * @param {string} [prefix] location of the placeholders sheet (default: site root)
+ * @returns {Promise<Object>} map of placeholder keys to values
+ */
+async function fetchPlaceholders(prefix = 'default') {
+  window.placeholders = window.placeholders || {};
+  if (!window.placeholders[prefix]) {
+    window.placeholders[prefix] = fetch(`${prefix === 'default' ? '' : prefix}/placeholders.json`)
+      .then((resp) => (resp.ok ? resp.json() : { data: [] }))
+      .then((json) => (json.data || []).reduce((map, row) => {
+        const key = row.key ?? row.Key;
+        const value = row.value ?? row.Value ?? '';
+        if (key) {
+          map[key] = value;
+          map[toCamelCase(key)] = value;
+        }
+        return map;
+      }, {}))
+      .catch(() => ({}));
+  }
+  return window.placeholders[prefix];
+}
+
 init();
 
 export {
@@ -677,6 +704,7 @@ export {
   decorateIcons,
   decorateSections,
   decorateTemplateAndTheme,
+  fetchPlaceholders,
   getMetadata,
   loadBlock,
   loadCSS,

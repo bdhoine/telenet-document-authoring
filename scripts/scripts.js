@@ -9,6 +9,7 @@ import {
   loadCSS,
   loadHeader,
   loadFooter,
+  fetchPlaceholders,
 } from './aem.js';
 
 /**
@@ -92,6 +93,27 @@ function decorateButtons(main) {
 }
 
 /**
+ * Replaces `{{key}}` tokens in an element's text with their placeholder values.
+ * @param {Element} element The container element
+ */
+async function replacePlaceholders(element) {
+  if (!element) return;
+  const placeholders = await fetchPlaceholders();
+  if (!Object.keys(placeholders).length) return;
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) {
+    if (walker.currentNode.nodeValue.includes('{{')) nodes.push(walker.currentNode);
+  }
+  nodes.forEach((node) => {
+    node.nodeValue = node.nodeValue.replace(/\{\{([^}]+)\}\}/g, (token, key) => {
+      const value = placeholders[key.trim()];
+      return value === undefined ? token : value;
+    });
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -114,6 +136,7 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
+    await replacePlaceholders(main);
     document.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), waitForFirstImage);
   }
@@ -136,8 +159,10 @@ async function loadLazy(doc) {
   const main = doc.querySelector('main');
   await loadSections(main);
 
-  loadHeader(doc.querySelector('header'));
-  loadFooter(doc.querySelector('footer'));
+  const header = doc.querySelector('header');
+  const footer = doc.querySelector('footer');
+  await Promise.all([loadHeader(header), loadFooter(footer)]);
+  await Promise.all([replacePlaceholders(header), replacePlaceholders(footer)]);
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
