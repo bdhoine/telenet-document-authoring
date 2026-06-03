@@ -34,6 +34,7 @@ blocks/<name>/<name>.{js,css}   Blocks: header, footer, banner, card,
 scripts/aem.js                  EDS core library (vendored)
 scripts/scripts.js              Project entry: decorateMain, eager/lazy/delayed
 scripts/delayed.js              Deferred work
+icons/<name>.svg                EDS content icons (:name: -> <img>/CSS mask)
 styles/styles.css               Design tokens (--tn-*), base type, .button, sections
 styles/fonts.css + fonts/       Self-hosted Telenet brand fonts (lazy @font-face)
 tools/                          Author tooling (da, quick-edit, sidekick)
@@ -60,6 +61,14 @@ A "Section Metadata" block's `Style` values become CSS classes on the section
 `highlight`, `centered`, `dark` (shaded full-width band), `full-width`,
 `angles` (curved top/bottom edges), and `2 columns` / `3 columns` / `4 columns`
 grids.
+
+### Icons
+
+Icons live in `icons/<name>.svg`. Authoring a `:name:` token in DA renders it as
+`<img src="/icons/name.svg">` (via `decorateIcons` in `aem.js`). For colored contexts
+(e.g. white social icons on the dark footer) the icon span is masked with the SVG and
+tinted via `currentcolor` — see `blocks/footer/footer.css`. A DA `icons` library sheet
+(`/docs/library/icons`, registered in the DA config) lets authors browse and insert them.
 
 ## Scripts
 
