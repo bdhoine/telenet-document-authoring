@@ -1,0 +1,206 @@
+header {
+  background-color: var(--tn-white);
+  border-bottom: 1px solid var(--tn-border-color);
+  font-family: var(--tn-font-body);
+}
+
+header nav .nav-utility,
+header nav .nav-main {
+  box-sizing: border-box;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+header nav ul {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+header nav li {
+  margin: 0;
+}
+
+header nav li p {
+  margin: 0;
+}
+
+header nav a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ---------- top utility bar ---------- */
+.nav-utility {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 10px;
+  font-size: 14px;
+  color: rgb(0 0 0 / 65%);
+}
+
+/* keep each side's lists on a single row */
+.nav-utility-left,
+.nav-utility-right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-utility a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* dropdown entries (Alle websites / MyTelenet / NL) */
+.nav-utility .has-dropdown {
+  position: relative;
+}
+
+.nav-utility .has-dropdown > p {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.nav-utility .has-dropdown > p::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border: 4px solid transparent;
+  border-top-color: currentcolor;
+  transform: translateY(2px);
+}
+
+.nav-utility .has-dropdown > ul {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  right: 0;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  min-width: 200px;
+  margin-top: 8px;
+  padding: 16px;
+  border-radius: var(--tn-radius-btn);
+  background-color: var(--tn-white);
+  box-shadow: var(--tn-shadow);
+  color: var(--tn-black);
+  font-size: 16px;
+}
+
+/* left-side menus open aligned to their left edge */
+.nav-utility-left .has-dropdown > ul {
+  right: auto;
+  left: 0;
+}
+
+.nav-utility .has-dropdown:hover > ul,
+.nav-utility .has-dropdown:focus-within > ul {
+  display: flex;
+}
+
+/* a bold dropdown item (e.g. "Aanmelden") renders as a centered button */
+.nav-utility .nav-dropdown-cta {
+  margin-top: 4px;
+}
+
+.nav-utility .nav-dropdown-cta .button {
+  width: 100%;
+  justify-content: center;
+  font-size: 16px;
+}
+
+/* ---------- main bar ---------- */
+.nav-main {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding-block: 16px;
+}
+
+.nav-brand {
+  flex: none;
+  line-height: 0;
+}
+
+.nav-brand img {
+  width: 48px;
+  height: 48px;
+}
+
+.nav-links {
+  flex: 1 1 auto;
+}
+
+.nav-links ul {
+  flex-wrap: wrap;
+  gap: 28px;
+}
+
+.nav-links a {
+  font-size: 16px;
+  color: var(--tn-black);
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- static search ---------- */
+.nav-search {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 240px;
+  padding: 8px 16px;
+  border-radius: var(--tn-radius-btn);
+  background-color: rgb(0 0 0 / 8%);
+  color: rgb(0 0 0 / 55%);
+}
+
+.nav-search-icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.nav-search input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: inherit;
+  font-size: 16px;
+  color: var(--tn-black);
+}
+
+.nav-search input::placeholder {
+  color: rgb(0 0 0 / 55%);
+}
+
+@media (width <= 900px) {
+  .nav-utility {
+    display: none;
+  }
+
+  .nav-main {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .nav-search {
+    width: 100%;
+    order: 3;
+  }
+}

@@ -55,6 +55,7 @@
 
   /* layout & shape */
   --tn-content-width: 1128px;
+  --tn-header-height: 123px;    /* reserve header space to avoid CLS */
   --tn-radius: 24px;
   --tn-radius-btn: 12px;
   --tn-radius-sm: 8px;
@@ -76,6 +77,12 @@ body {
 
 body.appear {
   display: block;
+}
+
+/* reserve the header height before the header block (and its CSS) load,
+   so populating the nav doesn't shift the page (CLS) */
+header {
+  min-height: var(--tn-header-height);
 }
 
 /* headings — compact display face, tight leading */
