@@ -34,6 +34,9 @@ blocks/<name>/<name>.{js,css}   Blocks: header, footer, banner, card,
 scripts/aem.js                  EDS core library (vendored)
 scripts/scripts.js              Project entry: decorateMain, eager/lazy/delayed
 scripts/delayed.js              Deferred work
+scripts/experiment-loader.js    Gates + lazy-loads the experimentation engine
+scripts/sidekick.js             Toggles the DA experimentation rail (exp.js)
+plugins/experimentation/        adobe/aem-experimentation v2 (git subtree)
 icons/<name>.svg                EDS content icons (:name: -> <img>/CSS mask)
 styles/styles.css               Design tokens (--tn-*), base type, .button, sections
 styles/fonts.css + fonts/       Self-hosted Telenet brand fonts (lazy @font-face)
@@ -69,6 +72,26 @@ Icons live in `icons/<name>.svg`. Authoring a `:name:` token in DA renders it as
 (e.g. white social icons on the dark footer) the icon span is masked with the SVG and
 tinted via `currentcolor` — see `blocks/footer/footer.css`. A DA `icons` library sheet
 (`/docs/library/icons`, registered in the DA config) lets authors browse and insert them.
+
+## Experimentation
+
+A/B experiments, campaigns, and audiences use the
+[`adobe/aem-experimentation`](https://github.com/adobe/aem-experimentation/tree/v2) **v2**
+plugin, vendored under `plugins/experimentation` via `git subtree`:
+
+```sh
+# update the plugin later
+git subtree pull --squash --prefix plugins/experimentation \
+  https://github.com/adobe/aem-experimentation.git v2
+```
+
+`scripts/experiment-loader.js` only loads the engine when a page declares experiment/
+campaign/audience metadata; `scripts/scripts.js` calls it early in `loadEager`. Authors
+configure an experiment in a page's **Metadata** block (`Experiment`, `Experiment Variants`,
+optionally `Audience` / `Campaign`) and simulate it with the **DA experimentation rail** —
+the sidekick `Experimentation` plugin (or the `?daexperiment` query parameter), wired in
+`scripts/sidekick.js`. See the
+[DA setup guide](https://docs.da.live/developers/guides/setup-experimentation).
 
 ## Scripts
 

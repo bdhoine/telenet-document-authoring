@@ -5,6 +5,8 @@ import { recommended, source, test } from '@adobe/eslint-config-helix';
 export default defineConfig([
   globalIgnores([
     '**/deps',
+    // vendored via git subtree (adobe/aem-experimentation v2); has its own toolchain
+    'plugins/**',
   ]),
   {
     languageOptions: {

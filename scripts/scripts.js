@@ -1,4 +1,6 @@
 import {
+  buildBlock,
+  decorateBlock,
   decorateIcons,
   decorateSections,
   decorateBlocks,
@@ -11,6 +13,19 @@ import {
   loadFooter,
   toCamelCase,
 } from './aem.js';
+import { runExperimentation } from './experiment-loader.js';
+
+const experimentationConfig = {
+  prodHost: 'main--telenet-document-authoring--bdhoine.aem.live',
+  audiences: {
+    mobile: () => window.innerWidth < 600,
+    desktop: () => window.innerWidth >= 600,
+  },
+  decorationFunction: (el) => {
+    buildBlock(el);
+    decorateBlock(el);
+  },
+};
 
 /**
  * load fonts.css and set a session storage flag
@@ -161,6 +176,7 @@ export function decorateMain(main) {
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
+  await runExperimentation(doc, experimentationConfig);
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
@@ -217,3 +233,32 @@ async function loadPage() {
 }
 
 loadPage();
+
+/**
+ * Loads the DA sidekick plugin module (for the experimentation rail) once the
+ * sidekick is ready.
+ */
+async function loadSidekick() {
+  if (document.querySelector('aem-sidekick')) {
+    import('./sidekick.js');
+    return;
+  }
+
+  document.addEventListener('sidekick-ready', () => {
+    import('./sidekick.js');
+  });
+}
+loadSidekick();
+
+(async function loadDa() {
+  const { searchParams } = new URL(window.location.href);
+
+  /* eslint-disable import/no-unresolved */
+  if (searchParams.get('dapreview')) {
+    import('https://da.live/scripts/dapreview.js')
+      .then(({ default: daPreview }) => daPreview(loadPage));
+  }
+  if (searchParams.get('daexperiment')) {
+    import('https://da.live/nx/public/plugins/exp/exp.js');
+  }
+}());
