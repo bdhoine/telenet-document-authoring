@@ -35,7 +35,7 @@ scripts/aem.js                  EDS core library (vendored)
 scripts/scripts.js              Project entry: decorateMain, eager/lazy/delayed
 scripts/delayed.js              Deferred work
 scripts/experiment-loader.js    Gates + lazy-loads the experimentation engine
-scripts/sidekick.js             Toggles the DA experimentation rail (exp.js)
+scripts/sidekick.js             Wires sidekick plugins: experimentation rail + quick-edit
 plugins/experimentation/        adobe/aem-experimentation v2 (git subtree)
 icons/<name>.svg                EDS content icons (:name: -> <img>/CSS mask)
 styles/styles.css               Design tokens (--tn-*), base type, .button, sections
@@ -87,10 +87,11 @@ git subtree pull --squash --prefix plugins/experimentation \
 
 `scripts/experiment-loader.js` only loads the engine when a page declares experiment/
 campaign/audience metadata; `scripts/scripts.js` calls it early in `loadEager`. Authors
-configure an experiment in a page's **Metadata** block (`Experiment`, `Experiment Variants`,
-optionally `Audience` / `Campaign`) and simulate it with the **DA experimentation rail** —
-the sidekick `Experimentation` plugin (or the `?daexperiment` query parameter), wired in
-`scripts/sidekick.js`. See the
+configure an experiment in a page's **Metadata** block (`Experiment` plus `Instant Experiment`
+for instant experiments, optionally `Audience` / `Campaign`) and simulate it with the **DA
+experimentation rail** — the sidekick `Experimentation` plugin (or the `?daexperiment` query
+parameter), wired in `scripts/sidekick.js`. The sidekick's `experimentation` / `quick-edit`
+plugin entries live in the Config Service sidekick config (`sidekick.json`), not the repo. See the
 [DA setup guide](https://docs.da.live/developers/guides/setup-experimentation).
 
 ## Scripts

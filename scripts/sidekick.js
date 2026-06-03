@@ -1,3 +1,5 @@
+import initQuickEdit from '../tools/quick-edit/quick-edit.js';
+
 let expMod;
 const DA_EXP = 'https://da.live/nx/public/plugins/exp/exp.js';
 
@@ -19,4 +21,5 @@ async function toggleExp() {
   const sk = document.querySelector('aem-sidekick');
   if (!sk) return;
   sk.addEventListener('custom:experimentation', toggleExp);
+  sk.addEventListener('custom:quick-edit', initQuickEdit);
 }());
