@@ -9,7 +9,7 @@ import {
   loadCSS,
   loadHeader,
   loadFooter,
-  fetchPlaceholders,
+  toCamelCase,
 } from './aem.js';
 
 /**
@@ -90,6 +90,34 @@ function decorateButtons(main) {
       em.replaceWith(a);
     }
   });
+}
+
+/**
+ * Fetches the site's placeholders sheet and returns a key/value map, cached
+ * per prefix on `window.placeholders`. Each key is exposed verbatim (so
+ * `{{key}}` tokens match literally) and as camelCase (for programmatic use).
+ * The boilerplate/author-kit ship no placeholder helper, so this lives here
+ * rather than in the vendored `aem.js`.
+ * @param {string} [prefix] location of the placeholders sheet (default: site root)
+ * @returns {Promise<Object>} map of placeholder keys to values
+ */
+async function fetchPlaceholders(prefix = 'default') {
+  window.placeholders = window.placeholders || {};
+  if (!window.placeholders[prefix]) {
+    window.placeholders[prefix] = fetch(`${prefix === 'default' ? '' : prefix}/placeholders.json`)
+      .then((resp) => (resp.ok ? resp.json() : { data: [] }))
+      .then((json) => (json.data || []).reduce((map, row) => {
+        const key = row.key ?? row.Key;
+        const value = row.value ?? row.Value ?? '';
+        if (key) {
+          map[key] = value;
+          map[toCamelCase(key)] = value;
+        }
+        return map;
+      }, {}))
+      .catch(() => ({}));
+  }
+  return window.placeholders[prefix];
 }
 
 /**
