@@ -23,13 +23,14 @@
   display: inline-block;
   align-self: flex-start;
   margin: 0 0 16px;
-  padding: 6px 14px;
+  padding: 4px 14px;
   border-radius: var(--tn-radius-sm);
   background-color: var(--tn-yellow);
   color: var(--tn-black);
   font-family: var(--tn-font-heading);
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
+  line-height: 24px;
 }
 
 /* title */
@@ -50,8 +51,9 @@
   align-items: baseline;
   gap: 8px;
   font-family: var(--tn-font-heading);
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
+  line-height: 1;
   text-decoration: underline;
   text-underline-offset: 3px;
 }

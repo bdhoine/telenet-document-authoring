@@ -5,18 +5,19 @@
   text-align: center;
 }
 
-/* the card chrome belongs on the product image, not the whole tile */
-.device picture img {
-  width: 100%;
-  height: auto;
+/* the white card is a padded frame around the product image (telenet.be) */
+.device picture {
+  display: block;
+  padding: 20px;
   border: 1px solid var(--tn-border-color);
   border-radius: 16px;
   background-color: var(--tn-white);
+  margin-bottom: 24px;
 }
 
-.device picture {
-  display: block;
-  margin-bottom: 24px;
+.device picture img {
+  width: 100%;
+  height: auto;
 }
 
 .device p {
