@@ -2,7 +2,7 @@
   box-sizing: border-box;
   overflow: hidden;
   max-width: 580px;
-  margin: 24px auto;
+  margin: 0 auto;
   border-radius: var(--tn-radius);
   background-color: var(--tn-white);
   box-shadow: var(--tn-shadow);

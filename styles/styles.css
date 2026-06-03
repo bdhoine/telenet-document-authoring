@@ -160,6 +160,18 @@ a.button,
   box-shadow: inset 0 0 0 2px var(--tn-black);
 }
 
+/* per-section see-all variants (telenet.be): promos use a plain outline
+   button without chevron; devices use the filled chevron button */
+main > .section.promo-container .default-content-wrapper p:has(> a:only-child) > a::before {
+  content: none;
+}
+
+main > .section.device-container .default-content-wrapper p:has(> a:only-child) > a {
+  background-color: var(--tn-black);
+  color: var(--tn-white);
+  box-shadow: none;
+}
+
 /* hover: fill to the telenet.be hover grey; outline buttons fill in */
 .button:hover,
 .default-content-wrapper p:has(> a:only-child) > a:hover {
@@ -284,6 +296,13 @@ main > .section[class~="4-columns"] {
   max-width: var(--tn-content-width);
   margin-inline: auto;
   padding-inline: 24px;
+}
+
+/* the grid gap already spaces the intro heading from the cards */
+main > .section[class~="2-columns"] > .default-content-wrapper :is(h2, h3):last-child,
+main > .section[class~="3-columns"] > .default-content-wrapper :is(h2, h3):last-child,
+main > .section[class~="4-columns"] > .default-content-wrapper :is(h2, h3):last-child {
+  margin-bottom: var(--tn-space-xs);
 }
 
 /* minmax(0, 1fr) keeps columns truly equal even when some cards contain images */
