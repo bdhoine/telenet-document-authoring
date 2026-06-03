@@ -5,12 +5,11 @@
   text-align: center;
 }
 
-/* the white card is a padded frame around the product image (telenet.be) */
+/* the white card is a borderless padded frame around the product image */
 .device picture {
   display: block;
-  padding: 20px;
-  border: 1px solid var(--tn-border-color);
-  border-radius: 16px;
+  padding: 24px 20px;
+  border-radius: var(--tn-radius);
   background-color: var(--tn-white);
   margin-bottom: 24px;
 }
@@ -45,9 +44,7 @@
 
 .device-old {
   display: block;
-  color: rgb(0 0 0 / 50%);
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
-  text-decoration: line-through;
 }

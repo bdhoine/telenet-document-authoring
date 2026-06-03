@@ -160,6 +160,21 @@ a.button,
   box-shadow: inset 0 0 0 2px var(--tn-black);
 }
 
+/* per-section heading scale (telenet.be): the device section uses the
+   largest display size with an extra-heavy bold cut; the closing help
+   section steps down */
+main > .section.device-container h2 {
+  font-size: clamp(40px, 6vw, 76px);
+}
+
+main > .section.device-container h2 strong {
+  font-weight: 900;
+}
+
+main > .section.links-container h2 {
+  font-size: 40px;
+}
+
 /* per-section see-all variants (telenet.be): promos use a plain outline
    button without chevron; devices use the filled chevron button */
 main > .section.promo-container .default-content-wrapper p:has(> a:only-child) > a::before {
