@@ -1,6 +1,63 @@
 # CLAUDE.md
 
+Guidance for Claude Code (and other AI agents) when working in this repository.
+
+## Project overview
+
+An **AEM Edge Delivery Services (EDS)** site, authored with **Document Authoring (DA, da.live)**, that recreates the look & feel of the Telenet residential homepage (`www2.telenet.be/residential/nl`).
+
+- Runtime stack is the **standard `aem-boilerplate`** (`scripts/aem.js` + `scripts/scripts.js` + `scripts/delayed.js`, `styles/styles.css`).
+- The repo was migrated away from a legacy custom "author-kit" runtime (`scripts/ak.js`, `scripts/lazy.js`, `deps/`); those files are gone. If you see references to them (e.g. in `404.html`), they are stale.
+- Content (nav, fragments, pages) lives in DA, not in this repo. The repo holds code: blocks, scripts, styles, and an edge worker.
+
+## Architecture
+
+- **`scripts/aem.js`** — vendored EDS core library (RUM, `loadCSS`, `decorateSections`, `decorateBlocks`, `loadBlock`, `decorateButtons`, section-metadata handling, etc.). Treat as a framework file; avoid editing unless necessary.
+- **`scripts/scripts.js`** — project entry (loaded from `head.html`). Eager/lazy/delayed phases; auto-blocks `/fragments/*` links; `decorateMain`.
+- **`scripts/delayed.js`** — deferred work (currently empty).
+- **`blocks/<name>/<name>.{js,css}`** — one folder per block. `<name>.js` default-exports `decorate(block)`; `aem.js` loads a block (JS + CSS) by its first class name when the block appears in content. Current blocks: `banner`, `card` (variants: list / accent / media / wide), `columns`, `fragment`, `usp`, `promo` (themes: dark / accent), `device`, `links`.
+- **`styles/`** — `styles.css` (design tokens `--tn-*`, base typography, shared chevron `.button`, section-metadata styles), `fonts.css` (lazy `@font-face`), `fonts/` (self-hosted Telenet brand fonts: Telenet Albra, PP Right Telenet), `lazy-styles.css`, `error.css`.
+- **`tools/`** — author-facing tooling (`da`, `quick-edit`, `sidekick`); not all wired into the boilerplate runtime.
+- **`workers/website/`** — Cloudflare Worker reference implementation (AEM proxy + handlers); configured via `wrangler.toml`.
+
+### Section Metadata styles (authored in DA, applied by `aem.js`)
+A "Section Metadata" block's `Style` values become section classes (other keys become `data-*`). Styles handled in `styles.css`: `highlight`, `centered`, `dark` (shaded full-width band), `full-width`, `angles` (curved top/bottom via SVG mask), and `2/3/4 columns` (matched with `[class~="N-columns"]` since they start with a digit).
+
+## Commands
+
+- **Install**: `npm i`
+- **Local dev**: `aem up` (AEM CLI, serves on `:3000`, proxying DA content). Install CLI with `npm i -g @adobe/aem-cli` if missing.
+- **Lint (run before committing)**: `npm run lint` — `lint:js` (ESLint, `@adobe/eslint-config-helix`) + `lint:css` (Stylelint, `stylelint-config-standard`). Keep both clean.
+- **Test**: `npm test` (`@web/test-runner`, specs in `test/`).
+
+## Conventions
+
+- Keep block CSS scoped to the block's class; share cross-block primitives via the `--tn-*` tokens and `.button` / `.tn-chevron` in `styles.css`.
+- New block = `blocks/<name>/<name>.js` (`export default function decorate(block)`) + `<name>.css`; no registration needed (loaded by class name).
+- Match surrounding code style; ESLint + Stylelint must pass. Verify visual changes in the browser before committing.
+
 ## Push Preferences
 
-- Push directly to `main` with `git push origin main` (no PR workflow for this repo).
+- Push directly to `main` with `git push origin main` (no PR workflow for this repo). The `origin` remote uses SSH (`git@github.com:bdhoine/telenet-document-authoring.git`).
 - Still confirm before each push.
+
+## Adobe skills for EDS / DA development
+
+Adobe maintains skills for AI coding agents at **https://github.com/adobe/skills** (under `plugins/aem/edge-delivery-services/skills/`). Prefer these when doing EDS/DA work:
+
+- **`content-driven-development`** — orchestrates the end-to-end workflow for any code change; the usual entry point.
+- **`analyze-and-plan`** — requirements & acceptance criteria before building.
+- **`building-blocks`** — implement new/modified blocks and core functionality.
+- **`content-modeling`** — design author-friendly block content structures.
+- **`block-inventory`** — survey available blocks before modeling content.
+- **`testing-blocks`** — browser testing of blocks.
+- **`code-review`** — self-review / PR assessment of EDS code.
+- **`page-import`** — import an existing webpage into canonical EDS markup.
+- **`da-content`** — DA + EDS content/formatting rules.
+- **`docs-search`** — search the aem.live documentation.
+- **`create-site`** — bootstrap a new EDS site from boilerplate + DA.
+- **`aem-cli`** — install/configure/troubleshoot the AEM CLI and local dev server.
+
+## Reference implementation
+
+Use **`aemsites/author-kit`** (https://github.com/aemsites/author-kit) as a reference implementation for EDS + DA patterns (this project originated from it). The official EDS boilerplate is `adobe/aem-boilerplate`.

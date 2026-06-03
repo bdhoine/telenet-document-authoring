@@ -1,102 +1,87 @@
-# Author Kit (whitelabel)
-A stripped-down, unbranded AEM Edge Delivery Services base. All branding —
-fonts, color palette, design tokens, typography, buttons, grid and spacing —
-has been removed so the site can be re-themed from scratch. Built on the kit by
-the team who brought you da.live and adobe.com.
+# Telenet — Document Authoring
 
-## Blocks
-Only the framework-essential blocks are included:
-
-* `header`, `footer` — site chrome
-* `columns` — multi-column layouts
-* `fragment` — reusable content fragments / auto-block (`/fragments/`)
-* `section-metadata` — section layout & options
-
-Block CSS files are intentionally empty placeholders — add project styling there.
-`styles/styles.css` keeps only the structural rules required for sections/blocks
-to decorate without a flash of unstyled content.
+An [AEM Edge Delivery Services](https://www.aem.live/) (EDS) site, authored with
+[Document Authoring](https://da.live) (DA), that recreates the look & feel of the
+Telenet residential homepage. Built on the standard
+[`adobe/aem-boilerplate`](https://github.com/adobe/aem-boilerplate); originally
+derived from [`aemsites/author-kit`](https://github.com/aemsites/author-kit).
 
 ## Getting started
 
-### 1. Github
-1. Use this template to make a new repo.
-1. Install [AEM Code Sync](https://da.live/bot).
+```sh
+# 1. Clone
+git clone git@github.com:bdhoine/telenet-document-authoring.git
+cd telenet-document-authoring
 
-### 2. DA content
-1. Browse to https://da.live/start.
-2. Follow the steps.
+# 2. Install dependencies (linting, tests)
+npm i
 
-### 3. Local development
-1. Clone your new repo to your computer.
-1. Install the AEM CLI using your terminal: `sudo npm install -g @adobe/aem-cli`
-1. Start the AEM CLI: `aem up`.
-1. Open the `{repo}` folder in your favorite code editor and buil something.
-1. **Recommended:** Install common npm packages like linting and testing: `npm i`.
+# 3. Install the AEM CLI (once, globally)
+npm i -g @adobe/aem-cli
 
-## Features
+# 4. Start the local dev server (proxies DA content) on http://localhost:3000
+aem up
+```
 
-### Localization & globalization
-* Language only support - Ex: en, de, hi, ja
-* Region only support - Ex: en-us, en-ca, de-de, de-ch
-* Hybrid support - Ex: en, en-us, de, de-ch, de-at
-* Fragment-based localized 404s
-* Localized Header & Footer
-* Do not translate support (#_dnt)
+Page content (navigation, fragments, pages) lives in **DA**, not in this repo —
+this repo holds the code (blocks, scripts, styles) and an edge worker.
 
-### Flexible section authoring
-* Section/block decoration machinery (grids, columns, containers) — styling is
-  unstyled by default; add layout CSS in the block files
-* Color scheme: light, dark
+## Project structure
 
-### Base content
-* Images w/ retina breakpoint
-* New window support
-* Deep link support
+```
+blocks/<name>/<name>.{js,css}   Blocks: banner, card, columns, fragment,
+                                 usp, promo, device, links
+scripts/aem.js                  EDS core library (vendored)
+scripts/scripts.js              Project entry: decorateMain, eager/lazy/delayed
+scripts/delayed.js              Deferred work
+styles/styles.css               Design tokens (--tn-*), base type, .button, sections
+styles/fonts.css + fonts/       Self-hosted Telenet brand fonts (lazy @font-face)
+tools/                          Author tooling (da, quick-edit, sidekick)
+workers/website/                Cloudflare Worker (AEM proxy) + wrangler.toml
+head.html                       Per-page <head> (preloads, styles, scripts)
+```
 
-### Header and footer content
-* Brand - First link in header
-* Main Menu - First list in header
-* Actions - Last section of header
-* Menu & mega menu support
-* Disable header/footer via meta props
+### Blocks
 
-### Sidekick & pre-production
-* Quick Edit
-* Extensible plumbing for plugins
-* Convert production links to relative
+Each block is a folder with a `<name>.js` (default-exports `decorate(block)`) and
+a `<name>.css`. `aem.js` loads a block by its first class name when it appears in
+authored content — no registration needed. Several blocks have variants:
 
-### Performance
-* Extensible LCP detection
+- **card** — link-list, accent (yellow), media (leading image), and `wide`
+- **promo** — `dark` and `accent` themes
+- **columns**, **banner**, **usp**, **device**, **links**, **fragment**
 
-### Developer tools
-* Environment detection
-* Extensible logging (console, coralogix, splunk, etc.)
-* Buildless reactive framework support (Lit)
-* Hash utils patterns (#_blank, #_dnt, etc)
-* Modern CSS scoping & nesting
-* AEM Operational Telemetry
+### Section styles (Section Metadata)
 
-### Operations
-* Cloudflare Worker reference implementation
+A "Section Metadata" block's `Style` values become CSS classes on the section
+(other keys become `data-*`). Supported in `styles.css`:
+`highlight`, `centered`, `dark` (shaded full-width band), `full-width`,
+`angles` (curved top/bottom edges), and `2 columns` / `3 columns` / `4 columns`
+grids.
 
-## Patterns
-### Page
-A page is what holds your content. It can be styled using a metadata property called `template` which will load styles that apply to the entire page.
+## Scripts
 
-### Section
-A section is a sub-section of your page. It can be styled using a `section-metadata` block. A section will control the layout of blocks.
+| Command | Description |
+|---|---|
+| `aem up` | Local dev server (`:3000`) |
+| `npm run lint` | ESLint (`@adobe/eslint-config-helix`) + Stylelint (`stylelint-config-standard`) |
+| `npm test` | Block/script tests via `@web/test-runner` |
 
-### Block
-Blocks are children of sections. A block adds visual context to parts of a page.
+Run `npm run lint` before committing; keep both linters clean.
 
-### Auto Block
-An auto block is a block generated from a pre-defined piece of content. Often times from a link that matches a particular pattern. Link-based auto blocks can be helpful when additional nesting of content is required.
+## Contributing
 
-### Default content
-Default content is content that lives outside a block.
+- New block → add `blocks/<name>/<name>.{js,css}`; keep CSS scoped to the block.
+- Reuse the shared design tokens (`--tn-*`) and `.button` / `.tn-chevron` utilities.
+- Verify visual changes in the browser, then commit.
+- See [`CLAUDE.md`](./CLAUDE.md) for agent/dev guidance and links to the relevant
+  [Adobe skills](https://github.com/adobe/skills) for EDS/DA development.
 
-## Design System
-This is a whitelabel base — the design system (spacing/gap tokens, emphasis and
-button styles, column/grid layout, color palette) has been intentionally
-removed. Re-introduce design tokens in `styles/styles.css` and per-block styling
-in the block CSS files. Only `light` / `dark` color schemes remain wired up.
+## References
+
+- [AEM Edge Delivery Services docs](https://www.aem.live/docs/)
+- [Document Authoring (da.live)](https://da.live)
+- [`adobe/aem-boilerplate`](https://github.com/adobe/aem-boilerplate) — official boilerplate
+- [`aemsites/author-kit`](https://github.com/aemsites/author-kit) — reference implementation
+- [`adobe/skills`](https://github.com/adobe/skills) — Adobe skills for AI coding agents
+```
