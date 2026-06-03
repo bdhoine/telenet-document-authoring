@@ -1,6 +1,5 @@
 .card {
   box-sizing: border-box;
-  margin-block: 16px;
   padding: 24px;
   border-radius: var(--tn-radius);
   background-color: var(--tn-white);

@@ -210,6 +210,16 @@ main > .section.banner-container {
   padding-block: 0;
 }
 
+/* consecutive card sections sit close together (cards row + "Ben je al
+   klant?" band on telenet.be are only ~32px apart) */
+main > .section.card-container {
+  padding-bottom: 16px;
+}
+
+main > .section.card-container + .section.card-container {
+  padding-top: 16px;
+}
+
 /* default (non-block) content is centered, like the Telenet section intros */
 .default-content-wrapper {
   text-align: center;
