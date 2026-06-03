@@ -36,6 +36,8 @@
 
 .device-price {
   margin-top: 12px;
+  font-size: 18px;
+  line-height: 28px;
 }
 
 .device-price strong {

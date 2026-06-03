@@ -17,7 +17,7 @@
 @font-face {
   font-family: "PP Right Telenet";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 400 500;
   font-display: swap;
   src: url("/styles/fonts/PPRightTelenet-CompactRegular.woff2") format("woff2");
 }
@@ -124,7 +124,7 @@ a.button,
   color: var(--tn-white);
   font-family: var(--tn-font-heading);
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1;
   text-decoration: none;
   cursor: pointer;
