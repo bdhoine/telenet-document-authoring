@@ -1,4 +1,5 @@
 .promo {
+  position: relative;
   box-sizing: border-box;
   overflow: hidden;
   max-width: 580px;
@@ -61,29 +62,46 @@
   text-decoration: none;
 }
 
-/* image pinned to the bottom edge, full-bleed */
-.promo .promo-media {
-  order: 99;
-  margin: auto -24px -24px;
+/* square-ish photos cover the whole card as a background layer */
+.promo .promo-media-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  margin: 0;
 }
 
-.promo .promo-media img {
+.promo .promo-media-bg img {
   display: block;
   width: 100%;
-  aspect-ratio: 21 / 10;
+  height: 100%;
   object-fit: cover;
+}
+
+.promo:has(.promo-media-bg) {
+  min-height: 520px;
+}
+
+.promo:has(.promo-media-bg) > div > div > :not(.promo-media-bg) {
+  position: relative;
+  z-index: 1;
+}
+
+/* wide graphics render inline at the bottom, inside the card padding */
+.promo .promo-media-inline {
+  order: 99;
+  margin: auto 0 0;
+}
+
+.promo .promo-media-inline img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* dark theme */
 .promo.dark > div > div {
   background-color: var(--tn-black);
   color: var(--tn-white);
-}
-
-.promo.dark .promo-media img {
-  aspect-ratio: auto;
-  height: auto;
-  object-fit: contain;
 }
 
 /* accent theme */
