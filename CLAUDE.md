@@ -38,6 +38,7 @@ A **`library-metadata`** block (used in `/docs/library/blocks/*` to describe a b
 ## Conventions
 
 - Keep block CSS scoped to the block's class; share cross-block primitives via the `--tn-*` tokens and `.button` / `.tn-chevron` in `styles.css`.
+- CTA styling has a **structural fallback** alongside the JS-added class (e.g. `.banner-content p:has(> a:only-child) > a` next to `.button`): the DA Quick Edit prose editor strips JS-added leaf classes (`.button`, `.promo-cta`, `.tn-chevron`) but preserves block wrappers and the `p > a` structure, so keying off structure keeps CTAs styled in the editor. Mirror this when adding block CTAs.
 - New block = `blocks/<name>/<name>.js` (`export default function decorate(block)`) + `<name>.css`; no registration needed (loaded by class name).
 - Match surrounding code style; ESLint + Stylelint must pass. Verify visual changes in the browser before committing.
 

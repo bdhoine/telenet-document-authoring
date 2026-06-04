@@ -31,18 +31,24 @@
   margin: 0 0 16px;
 }
 
-.card .button-wrapper {
+/* the `.button`/`.button-wrapper` classes are added by card.js but stripped by
+   the DA Quick Edit prose editor; the `p:has(> a:only-child)` selectors key off
+   the surviving structure so CTAs stay styled in the editor too */
+.card .button-wrapper,
+.card p:has(> a:only-child) {
   margin: 8px 0 0;
 }
 
 /* card CTAs have no chevron marker (except the full-width "wide" card) */
-.card:not(.wide) .button::before {
+.card:not(.wide) .button::before,
+.card:not(.wide) p:has(> a:only-child) > a::before {
   content: none;
 }
 
 /* and are centered, full width within the card padding; min-height matches the
    chevron buttons so all card CTAs are the same height */
-.card:not(.wide) .button {
+.card:not(.wide) .button,
+.card:not(.wide) p:has(> a:only-child) > a {
   box-sizing: border-box;
   display: flex;
   justify-content: center;

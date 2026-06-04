@@ -41,12 +41,17 @@
   line-height: 1;
 }
 
-/* CTA rendered as an underlined link with a chevron (not a pill button) */
-.promo-cta {
+/* CTA rendered as an underlined link with a chevron (not a pill button). The
+   `.promo-cta` class is added by promo.js but stripped by the DA Quick Edit
+   prose editor, so the structural selectors key off the surviving `p > a` (a
+   text link that is the sole child of its paragraph) to keep the CTA styled. */
+.promo-cta,
+.promo p:has(> a:only-child:not(:has(picture))) {
   margin: 4px 0 0;
 }
 
-.promo-cta a {
+.promo-cta a,
+.promo p:has(> a:only-child) > a:not(:has(picture)) {
   display: inline-flex;
   align-items: baseline;
   gap: 8px;
@@ -58,7 +63,8 @@
   text-underline-offset: 3px;
 }
 
-.promo-cta a::after {
+.promo-cta a::after,
+.promo p:has(> a:only-child) > a:not(:has(picture))::after {
   content: "›";
   font-weight: 900;
   text-decoration: none;

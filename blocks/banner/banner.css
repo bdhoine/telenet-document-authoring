@@ -48,7 +48,10 @@
   line-height: 1;
 }
 
-.banner-content .button-wrapper {
+/* the `.button-wrapper` class is added by banner.js but stripped by the DA
+   Quick Edit prose editor; key off the surviving structure too */
+.banner-content .button-wrapper,
+.banner-content p:has(> a:only-child) {
   margin: 0;
 }
 

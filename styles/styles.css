@@ -120,7 +120,9 @@ img {
 /* base shape (filled). Also covers a standalone "see all" link in default content. */
 .button,
 a.button,
-.default-content-wrapper p:has(> a:only-child) > a {
+.default-content-wrapper p:has(> a:only-child) > a,
+.banner-content p:has(> a:only-child) > a,
+.card p:has(> a:only-child) > a {
   display: inline-flex;
   align-items: center;
   gap: var(--tn-space-s);
@@ -143,7 +145,10 @@ a.button,
 /* shared yellow chevron square (buttons, see-all links, .tn-chevron utility) */
 .button::before,
 .default-content-wrapper p:has(> a:only-child) > a::before,
-.tn-chevron::before {
+.tn-chevron::before,
+.banner-content p:has(> a:only-child) > a::before,
+.card-list li a::before,
+.card.wide p:has(> a:only-child) > a::before {
   content: "›";
   display: grid;
   place-items: center;
@@ -161,7 +166,8 @@ a.button,
 
 /* outline (secondary) variant + the standalone see-all link */
 .button.secondary,
-.default-content-wrapper p:has(> a:only-child) > a {
+.default-content-wrapper p:has(> a:only-child) > a,
+.card:not(.card-highlight) p:has(> a:only-child) > a {
   background-color: transparent;
   color: var(--tn-black);
   box-shadow: inset 0 0 0 2px var(--tn-black);
@@ -196,7 +202,9 @@ main > .section.device-container .default-content-wrapper p:has(> a:only-child) 
 
 /* hover: fill to the telenet.be hover grey; outline buttons fill in */
 .button:hover,
-.default-content-wrapper p:has(> a:only-child) > a:hover {
+.default-content-wrapper p:has(> a:only-child) > a:hover,
+.banner-content p:has(> a:only-child) > a:hover,
+.card p:has(> a:only-child) > a:hover {
   background-color: var(--tn-black-hover);
   color: var(--tn-white);
   box-shadow: none;
