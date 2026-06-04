@@ -156,6 +156,16 @@ header nav a {
   text-underline-offset: 3px;
 }
 
+/* drawer is layout-transparent on desktop, so links + search lay out inline */
+.nav-drawer {
+  display: contents;
+}
+
+/* hamburger only appears on mobile */
+.nav-hamburger {
+  display: none;
+}
+
 /* ---------- static search ---------- */
 .nav-search {
   flex: none;
@@ -199,8 +209,79 @@ header nav a {
     gap: 16px;
   }
 
-  .nav-search {
+  /* push the hamburger to the right of the brand */
+  .nav-brand {
+    margin-right: auto;
+  }
+
+  /* ---- hamburger button (three bars → X) ---- */
+  .nav-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    box-sizing: border-box;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .nav-hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--tn-black);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .nav-open .nav-hamburger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav-open .nav-hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-open .nav-hamburger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ---- collapsible drawer ---- */
+  .nav-drawer {
+    display: none;
+    flex-basis: 100%;
     width: 100%;
     order: 3;
+  }
+
+  .nav-open .nav-drawer {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 8px 16px;
+  }
+
+  /* search at the top of the open menu, links stacked below */
+  .nav-drawer .nav-search {
+    order: -1;
+    width: 100%;
+  }
+
+  .nav-links {
+    flex: none;
+  }
+
+  .nav-links ul {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .nav-links a {
+    font-size: 18px;
   }
 }

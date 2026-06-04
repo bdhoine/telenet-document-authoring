@@ -66,7 +66,33 @@ export default async function decorate(block) {
     </svg>
     <input type="search" placeholder="Zoek" aria-label="Zoek" />`;
 
-  main.append(brand, links, search);
+  // links + search share a drawer; on desktop the drawer is `display: contents`
+  // so they lay out inline, on mobile it becomes the collapsible menu panel
+  const drawer = document.createElement('div');
+  drawer.className = 'nav-drawer';
+  drawer.append(links, search);
+
+  // hamburger toggles the drawer on mobile (hidden on desktop via CSS)
+  const hamburger = document.createElement('button');
+  hamburger.className = 'nav-hamburger';
+  hamburger.type = 'button';
+  hamburger.setAttribute('aria-label', 'Menu');
+  hamburger.setAttribute('aria-controls', 'nav');
+  hamburger.setAttribute('aria-expanded', 'false');
+  hamburger.innerHTML = '<span></span><span></span><span></span>';
+  hamburger.addEventListener('click', () => {
+    const open = nav.classList.toggle('nav-open');
+    hamburger.setAttribute('aria-expanded', String(open));
+  });
+  // close the menu after following a link
+  drawer.addEventListener('click', (e) => {
+    if (e.target.closest('a')) {
+      nav.classList.remove('nav-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  main.append(brand, drawer, hamburger);
 
   nav.append(utility, main);
   block.textContent = '';

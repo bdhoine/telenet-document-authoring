@@ -35,6 +35,7 @@
 .banner-content {
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
   width: 100%;
   max-width: var(--tn-content-width);
   margin-inline: auto;
@@ -55,5 +56,54 @@
   /* heading occupies two-thirds of the banner, leaving room for the artwork */
   .banner-content h1 {
     max-width: 66%;
+  }
+}
+
+/* ---------- mobile: stack heading over the artwork ----------
+   The artwork is a wide (≈5:1) white-background strip with the yellow blob and
+   the wifi+phone illustration. Cover-cropping it on a narrow screen hides the
+   illustration, so below the mobile breakpoint we paint the band yellow, keep
+   the heading/CTA on top, and drop the artwork in full-width underneath (its
+   white background reads as the illustration card, à la telenet.be mobile). */
+@media (width <= 600px) {
+  .banner {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+    padding-block: 40px 0;
+    background-color: #faea50; /* campaign yellow, sampled from the artwork */
+  }
+
+  .banner-content {
+    order: 1;
+    padding-inline: 24px;
+  }
+
+  .banner-content h1 {
+    max-width: none;
+    margin-bottom: 28px;
+    font-size: 48px;
+    line-height: 1.02;
+  }
+
+  /* take the media out of the absolute fill and frame the illustration in a
+     centered white card, à la telenet.be mobile. aspect-ratio reserves the
+     space up-front so the eager image causes no layout shift. */
+  .banner-media {
+    position: static;
+    order: 2;
+    box-sizing: border-box;
+    width: calc(100% - 48px);
+    max-width: 360px;
+    margin: 28px auto 0;
+    aspect-ratio: 16 / 11;
+    border-radius: var(--tn-radius);
+    background-color: var(--tn-white);
+    overflow: hidden;
+  }
+
+  .banner-media img {
+    object-fit: cover;
+    object-position: 80% 50%; /* focus the wifi + phone illustration, past the yellow blob */
   }
 }
