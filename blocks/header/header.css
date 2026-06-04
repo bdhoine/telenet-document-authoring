@@ -116,7 +116,15 @@ header nav a {
 .nav-utility .nav-dropdown-cta .button {
   width: 100%;
   justify-content: center;
+  gap: 0;
+  padding-inline: 20px;
   font-size: 16px;
+}
+
+/* the dropdown CTA is a plain black button — drop the yellow chevron so the
+   label is centered (matches telenet.be) */
+.nav-utility .nav-dropdown-cta .button::before {
+  content: none;
 }
 
 /* ---------- main bar ---------- */
@@ -169,6 +177,7 @@ header nav a {
 /* ---------- static search ---------- */
 .nav-search {
   flex: none;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   gap: 10px;
