@@ -40,7 +40,8 @@
   --tn-black-hover: #2e2d2c;    /* button hover (matches telenet.be) */
   --tn-white: #fff;
   --tn-bg: #fafaf8;             /* warm off-white page background */
-  --tn-shaded: #f0eeeb;         /* gray band background */
+  --tn-shaded: #f0eeeb;         /* gray band background (accent section) */
+  --tn-dark: #262524;           /* charcoal band background (dark section) */
   --tn-text: #000;
 
   /* fonts */
@@ -315,9 +316,15 @@ main > .section.centered {
   text-align: center;
 }
 
-/* a darker/shaded full-width band, optionally with curved top & bottom edges */
-main > .section.dark {
+/* a shaded full-width band, optionally with curved top & bottom edges */
+main > .section.accent {
   background-color: var(--tn-shaded);
+}
+
+/* a full-width dark (charcoal) band with light text */
+main > .section.dark {
+  background-color: var(--tn-dark);
+  color: var(--tn-white);
 }
 
 main > .section.full-width {
@@ -410,11 +417,15 @@ main > .section[class~="4-columns"] :is(.card, .promo) > div > div {
 }
 
 /* pin the CTA to the bottom. `.button-wrapper` is added by JS but stripped by
-   Quick Edit, so also key off the surviving structure (a paragraph whose only
-   child is a link) so cards stay bottom-aligned in the editor too. */
-main > .section[class~="2-columns"] :is(.card, .promo) :is(.button-wrapper, p:has(> a:only-child:not(li a))),
-main > .section[class~="3-columns"] :is(.card, .promo) :is(.button-wrapper, p:has(> a:only-child:not(li a))),
-main > .section[class~="4-columns"] :is(.card, .promo) :is(.button-wrapper, p:has(> a:only-child:not(li a))) {
+   Quick Edit, so for cards also key off the surviving structure (a paragraph
+   whose only child is a link). Scoped to `.card` only — promos lay their CTA out
+   inline (and would otherwise have the action link pushed away from its text). */
+main > .section[class~="2-columns"] :is(.card, .promo) .button-wrapper,
+main > .section[class~="3-columns"] :is(.card, .promo) .button-wrapper,
+main > .section[class~="4-columns"] :is(.card, .promo) .button-wrapper,
+main > .section[class~="2-columns"] .card p:has(> a:only-child:not(li a)),
+main > .section[class~="3-columns"] .card p:has(> a:only-child:not(li a)),
+main > .section[class~="4-columns"] .card p:has(> a:only-child:not(li a)) {
   margin-top: auto;
 }
 

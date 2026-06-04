@@ -78,6 +78,13 @@
   margin: 0;
 }
 
+/* Quick Edit wraps each list item's text in a <p>; `.card p { margin: 0 0 16px }`
+   would then add a gap between items, so zero it (matches nothing in the live
+   render, where the item content is a bare link) */
+.card-list li p {
+  margin: 0;
+}
+
 /* link layout; the chevron marker comes from the shared .tn-chevron rule */
 .card-list li a {
   display: block;
