@@ -36,6 +36,14 @@
   height: 48px;
 }
 
+/* Quick Edit keeps the original icon inside the editable prose while decorate()
+   also moves a copy into .usp-icon, so the icon renders twice. Hide the in-editor
+   copy (a picture left inside a prose paragraph); in the live render the icon only
+   ever lives in .usp-icon, so this matches nothing there. */
+.usp-item .prosemirror-editor picture {
+  display: none;
+}
+
 .usp-item p {
   grid-column: 2;
   margin: 0;

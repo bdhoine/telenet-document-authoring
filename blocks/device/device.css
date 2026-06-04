@@ -29,18 +29,25 @@
   font-weight: 700;
 }
 
-.device-name a {
+/* the name is a bold link; `.device-name` is stripped by Quick Edit, so also
+   key off the structure (the only link in a device card is the product name) */
+.device-name a,
+.device a {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-.device-price {
+/* `.device-price` is stripped by Quick Edit; the price paragraph is the one that
+   contains a <br> (price over the "in plaats van" line), which survives */
+.device-price,
+.device p:has(br) {
   margin-top: 12px;
   font-size: 18px;
   line-height: 28px;
 }
 
-.device-price strong {
+.device-price strong,
+.device p:has(br) strong {
   font-size: 18px;
 }
 

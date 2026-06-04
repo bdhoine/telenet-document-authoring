@@ -132,7 +132,14 @@
   padding-left: 88px;
 }
 
-.card.wide .card-figure {
+/* `.card-figure`/`.button-wrapper` are stripped by Quick Edit and the prose
+   wrapper breaks the `>`/`+` selectors, so the wide card keys off the surviving
+   structure: the figure is the paragraph holding the icon, the CTA is the
+   paragraph holding the sole link, and the body is the remaining paragraph.
+   `.prosemirror-editor { display: contents }` (styles.css) lets these prose
+   paragraphs participate as grid items in the editor. */
+.card.wide .card-figure,
+.card.wide p:has(> picture) {
   grid-column: 1;
   margin: 0 0 4px;
   font-family: var(--tn-font-heading);
@@ -141,7 +148,8 @@
   line-height: 1;
 }
 
-.card.wide .card-figure picture {
+.card.wide .card-figure picture,
+.card.wide p:has(> picture) picture {
   position: absolute;
   left: 0;
   top: 50%;
@@ -149,21 +157,24 @@
   line-height: 0;
 }
 
-.card.wide .card-figure img {
+.card.wide .card-figure img,
+.card.wide p:has(> picture) img {
   width: 72px;
   height: auto;
   border-radius: 0;
 }
 
 /* body aligns under the title, to the right of the icon */
-.card.wide .card-figure + p {
+.card.wide .card-figure + p,
+.card.wide p:not(:has(picture), :has(a)) {
   grid-column: 1;
   margin: 0;
   font-size: 18px;
   line-height: 28px;
 }
 
-.card.wide .button-wrapper {
+.card.wide .button-wrapper,
+.card.wide p:has(> a:only-child:not(li a)) {
   grid-column: 2;
   grid-row: 1 / -1;
   align-self: center;

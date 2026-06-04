@@ -106,6 +106,22 @@
   height: auto;
 }
 
+/* Quick Edit strips the JS promo-media-* classification (it depends on the
+   image's intrinsic ratio, which CSS can't read), leaving the image paragraph
+   un-classed. Fall back to a clean inline image at the bottom rather than letting
+   it reflow at intrinsic size. In the live render the paragraph always carries one
+   of the promo-media-* classes, so this matches nothing there. */
+.promo p:has(> picture):not(.promo-media-bg, .promo-media-inline) {
+  order: 99;
+  margin: 12px 0 0;
+}
+
+.promo p:has(> picture):not(.promo-media-bg, .promo-media-inline) img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* dark theme */
 .promo.dark > div > div {
   background-color: var(--tn-black);

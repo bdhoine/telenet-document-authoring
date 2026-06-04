@@ -5,7 +5,10 @@
   gap: 120px;
 }
 
-.links-item {
+/* `.links-item` is added by JS but stripped by Quick Edit; key off the surviving
+   structure (paragraphs inside the links cell) so the layout holds in the editor */
+.links-item,
+.links > div > div p {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,12 +17,14 @@
   text-align: center;
 }
 
-.links-item picture img {
+.links-item picture img,
+.links > div > div p picture img {
   width: 40px;
   height: auto;
 }
 
-.links-item a {
+.links-item a,
+.links > div > div p a {
   font-size: 18px;
   text-underline-offset: 3px;
 }
