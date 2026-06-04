@@ -1,0 +1,10 @@
+/*
+ * Fragment Block
+ * Include content on a page as a fragment.
+ * https://www.aem.live/developer/block-collection/fragment
+ */
+
+.fragment .section {
+  margin: 0;
+  padding: 0;
+}
