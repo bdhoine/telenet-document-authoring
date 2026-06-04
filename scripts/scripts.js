@@ -181,7 +181,10 @@ async function loadEager(doc) {
     decorateMain(main);
     await replacePlaceholders(main);
     document.body.classList.add('appear');
-    await loadSection(main.querySelector('.section'), waitForFirstImage);
+    // Quick Edit re-runs loadPage inside its iframe; the waitForFirstImage
+    // optimization never resolves there and leaves the page blank, so skip it.
+    const inQuickEdit = new URLSearchParams(window.location.search).has('quick-edit');
+    await loadSection(main.querySelector('.section'), inQuickEdit ? undefined : waitForFirstImage);
   }
 
   try {
@@ -259,5 +262,8 @@ loadSidekick();
   }
   if (searchParams.get('daexperiment')) {
     import('https://da.live/nx/public/plugins/exp/exp.js');
+  }
+  if (searchParams.has('quick-edit')) {
+    import('../tools/quick-edit/quick-edit.js').then(({ default: initQuickEdit }) => initQuickEdit());
   }
 }());

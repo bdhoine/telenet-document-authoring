@@ -44,5 +44,8 @@ export default function init(payload) {
   if (ref === 'local') origin = 'http://localhost:6456';
   if (!origin) origin = `https://${ref}--da-nx--adobe.aem.live`;
   addImportmap();
-  loadMoudle(origin, payload || generateSidekickPayload());
+  // The sidekick passes a CustomEvent whose detail lacks the {config, location}
+  // shape the DA plugin needs; fall back to a payload derived from the URL.
+  const valid = payload?.detail?.config && payload?.detail?.location;
+  loadMoudle(origin, valid ? payload : generateSidekickPayload());
 }
