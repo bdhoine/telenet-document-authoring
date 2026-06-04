@@ -207,6 +207,11 @@ async function loadLazy(doc) {
 
   const header = doc.querySelector('header');
   const footer = doc.querySelector('footer');
+  // loadHeader/loadFooter append a block, so clear any prior content first:
+  // DA Quick Edit / the da.live canvas re-run loadPage on an already-decorated
+  // body, which would otherwise stack a second header/footer.
+  header?.replaceChildren();
+  footer?.replaceChildren();
   await Promise.all([loadHeader(header), loadFooter(footer)]);
   await Promise.all([replacePlaceholders(header), replacePlaceholders(footer)]);
 
