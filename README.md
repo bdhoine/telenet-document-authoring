@@ -119,4 +119,3 @@ Run `npm run lint` before committing; keep both linters clean.
 - [`adobe/aem-boilerplate`](https://github.com/adobe/aem-boilerplate) — official boilerplate
 - [`aemsites/author-kit`](https://github.com/aemsites/author-kit) — reference implementation
 - [`adobe/skills`](https://github.com/adobe/skills) — Adobe skills for AI coding agents
-```
