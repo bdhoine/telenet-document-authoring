@@ -114,6 +114,7 @@ header nav a {
 }
 
 .nav-utility .nav-dropdown-cta .button {
+  box-sizing: border-box;
   width: 100%;
   justify-content: center;
   gap: 0;
