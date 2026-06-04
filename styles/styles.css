@@ -222,6 +222,14 @@ a:focus-visible,
   margin: 0;
 }
 
+/* library-metadata describes a block for the DA block library; unlike
+   metadata/section-metadata the pipeline does not strip it, so hide it
+   everywhere (incl. the da.live preview) — it must never render. */
+.library-metadata,
+.library-metadata-wrapper {
+  display: none;
+}
+
 /* ---------- sections ---------- */
 main > .section {
   padding-block: clamp(28px, 5vw, 56px);

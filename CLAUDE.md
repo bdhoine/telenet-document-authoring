@@ -26,6 +26,8 @@ An **AEM Edge Delivery Services (EDS)** site, authored with **Document Authoring
 ### Section Metadata styles (authored in DA, applied by `aem.js`)
 A "Section Metadata" block's `Style` values become section classes (other keys become `data-*`). Styles handled in `styles.css`: `highlight`, `centered`, `dark` (shaded full-width band), `full-width`, `angles` (curved top/bottom via SVG mask), and `2/3/4 columns` (matched with `[class~="N-columns"]` since they start with a digit).
 
+A **`library-metadata`** block (used in `/docs/library/blocks/*` to describe a block for the DA library) is **not** stripped by the pipeline (unlike `metadata`/`section-metadata`), so `styles.css` hides `.library-metadata`/`.library-metadata-wrapper` to keep it from rendering on pages and in the da.live preview.
+
 ## Commands
 
 - **Install**: `npm i`
