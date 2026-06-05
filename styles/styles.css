@@ -453,14 +453,11 @@ main .section[data-section-status="initialized"] {
 /* ---------- DA Quick Edit compatibility ----------
    Quick Edit makes block prose editable by wrapping every paragraph in
    `<div class="prosemirror-editor"><div class="ProseMirror" contenteditable>…</div></div>`
-   and stripping JS-added classes from the prose nodes (<p>/<a>/<strong>). Make the
-   outer wrapper transparent to layout so the inner `.ProseMirror` still participates
-   as a flex/grid item. Do NOT apply `display: contents` to `.ProseMirror` itself —
-   it is the contenteditable surface, and removing its box gives it a 0×0 rect that
-   breaks clicking/cursor/selection in the editor. This class only exists inside the
-   editor, so it is a no-op on the live site. Block CSS must additionally key styling
-   off the authored structure (tags/`:has()`) or surviving wrappers, never off the
-   stripped prose classes. */
-.prosemirror-editor {
-  display: contents;
-}
+   and stripping JS-added classes from the prose nodes (<p>/<a>/<strong>). Do NOT apply
+   `display: contents` to these wrappers: on `.ProseMirror` it gives the contenteditable
+   surface a 0×0 box (breaks clicking/cursor/selection), and on `.prosemirror-editor` it
+   removes the box DA draws its editable-region outlines on (the boxes vanish while
+   editing). Instead, block CSS keys styling off the authored structure (tags/`:has()`)
+   or the surviving wrappers — never off the stripped prose classes. The trade-off is
+   that prose-node-level flex/grid layout (e.g. CTA `margin-top:auto`, the wide-card
+   grid) does not apply inside the editor; the live render is unaffected. */
