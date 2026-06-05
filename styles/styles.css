@@ -452,16 +452,15 @@ main .section[data-section-status="initialized"] {
 
 /* ---------- DA Quick Edit compatibility ----------
    Quick Edit makes block prose editable by wrapping every paragraph in
-   `<div class="prosemirror-editor"><div class="ProseMirror">…</div></div>` and
-   stripping JS-added classes from the prose nodes (<p>/<a>/<strong>). Make both
-   wrapper levels transparent to layout so the real prose nodes still participate
-   as flex/grid children (CTA `margin-top:auto`, grids) and so absolute-positioning
-   offset parents resolve correctly. These classes only exist inside the editor,
-   so this is a no-op on the live site. Block CSS must additionally key styling off
-   the authored structure (tags/`:has()`), never off the stripped prose classes. */
-/* stylelint-disable selector-class-pattern -- .ProseMirror is DA's fixed class */
-.prosemirror-editor,
-.prosemirror-editor > .ProseMirror {
+   `<div class="prosemirror-editor"><div class="ProseMirror" contenteditable>…</div></div>`
+   and stripping JS-added classes from the prose nodes (<p>/<a>/<strong>). Make the
+   outer wrapper transparent to layout so the inner `.ProseMirror` still participates
+   as a flex/grid item. Do NOT apply `display: contents` to `.ProseMirror` itself —
+   it is the contenteditable surface, and removing its box gives it a 0×0 rect that
+   breaks clicking/cursor/selection in the editor. This class only exists inside the
+   editor, so it is a no-op on the live site. Block CSS must additionally key styling
+   off the authored structure (tags/`:has()`) or surviving wrappers, never off the
+   stripped prose classes. */
+.prosemirror-editor {
   display: contents;
 }
-/* stylelint-enable selector-class-pattern */
