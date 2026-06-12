@@ -14,6 +14,7 @@ import {
   toCamelCase,
 } from './aem.js';
 import { runExperimentation } from './experiment-loader.js';
+import loadLaunch from './martech.js';
 
 const experimentationConfig = {
   prodHost: 'main--telenet-document-authoring--bdhoine.aem.live',
@@ -221,6 +222,10 @@ async function loadLazy(doc) {
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
+
+  // Adobe Launch (tags) — lazy phase so the consent banner / tags surface
+  // promptly while staying off the critical render path.
+  loadLaunch();
 }
 
 /**
