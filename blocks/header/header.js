@@ -64,7 +64,7 @@ export default async function decorate(block) {
       <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
       <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
     </svg>
-    <input type="search" placeholder="Zoek" aria-label="Zoek" />`;
+    <input type="search" name="q" placeholder="Zoek" aria-label="Zoek" />`;
 
   // links + search share a drawer; on desktop the drawer is `display: contents`
   // so they lay out inline, on mobile it becomes the collapsible menu panel
