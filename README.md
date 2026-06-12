@@ -33,10 +33,12 @@ blocks/<name>/<name>.{js,css}   Blocks: header, footer, banner, card,
                                  columns, fragment, usp, promo, device, links
 scripts/aem.js                  EDS core library (vendored)
 scripts/scripts.js              Project entry: decorateMain, eager/lazy/delayed
-scripts/delayed.js              Deferred work
+scripts/martech.js              Glue for the aem-martech plugin (WebSDK, ACDL, consent)
+scripts/delayed.js              Deferred work: data-layer interaction events
 scripts/experiment-loader.js    Gates + lazy-loads the experimentation engine
 scripts/sidekick.js             Wires sidekick plugins: experimentation rail + quick-edit
 plugins/experimentation/        adobe/aem-experimentation v2 (git subtree)
+plugins/martech/                adobe-rnd/aem-martech (git subtree)
 icons/<name>.svg                EDS content icons (:name: -> <img>/CSS mask)
 styles/styles.css               Design tokens (--tn-*), base type, .button, sections
 styles/fonts.css + fonts/       Self-hosted Telenet brand fonts (lazy @font-face)
@@ -93,6 +95,27 @@ experimentation rail** — the sidekick `Experimentation` plugin (or the `?daexp
 parameter), wired in `scripts/sidekick.js`. The sidekick's `experimentation` / `quick-edit`
 plugin entries live in the Config Service sidekick config (`sidekick.json`), not the repo. See the
 [DA setup guide](https://docs.da.live/developers/guides/setup-experimentation).
+
+## Martech & analytics
+
+Analytics, the data layer, and personalization use Adobe's
+[`adobe-rnd/aem-martech`](https://github.com/adobe-rnd/aem-martech) plugin, vendored
+under `plugins/martech` via `git subtree`:
+
+```sh
+# update the plugin later
+git subtree pull --squash --prefix plugins/martech \
+  git@github.com:adobe-rnd/aem-martech.git main
+```
+
+`scripts/martech.js` is the project glue: it holds the WebSDK config (datastream +
+IMS org), wires the plugin's eager/lazy/delayed phases into `scripts/scripts.js`,
+maps OneTrust consent (cookie parse + `consent.onetrust` event) to WebSDK consent,
+and loads the legacy Launch property (OneTrust, ContentSquare) in the delayed phase.
+Per-page Target personalization is opt-in via a `Target` key in the page's Metadata
+block. Interaction events (CTA clicks, accordion opens) are pushed to
+`window.adobeDataLayer` from `scripts/delayed.js`. Martech is skipped entirely in
+tests and under DA author tooling (`?quick-edit` / `?dapreview` / `?daexperiment`).
 
 ## Scripts
 

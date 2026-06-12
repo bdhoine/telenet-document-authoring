@@ -1,9 +1,16 @@
-import { loadScript } from './aem.js';
+import { getMetadata, loadScript } from './aem.js';
 
-// Adobe Experience Platform Launch (tags). Loaded in the LAZY phase (right after
-// the eager LCP content), not the delayed phase, so the consent banner / tags
-// surface promptly instead of ~3s late. Still off the critical render path.
-//
+// Glue module for the vendored adobe-rnd/aem-martech plugin (plugins/martech):
+// AEP WebSDK (alloy) + Adobe Client Data Layer, analytics page views routed
+// through an AEP datastream, optional eager Target personalization, and the
+// legacy Launch property (OneTrust / ContentSquare) loaded in the DELAYED
+// phase via launchUrls. The plugin is imported dynamically so it stays out of
+// the module graph entirely for tests and DA author tooling.
+
+const ORG_ID = '1EF86DCB632345E10A495F9E@AdobeOrg';
+// Single datastream for all environments.
+const DATASTREAM_ID = 'fe4e11e8-1d0f-4bfb-ab76-662fed0bf226';
+
 // Launch publishes one embed code per environment (Development / Staging /
 // Production), each with its own build hash. Pick the right one by host:
 // localhost / local.telenet.be -> Development, *.aem.page (preview) -> Staging,
@@ -31,6 +38,45 @@ function getLaunchScript() {
   return LAUNCH_SCRIPTS.staging;
 }
 
+// OneTrust consent groups -> WebSDK consent purposes. Telenet's OneTrust uses
+// short-format group ids (C002, not the OneTrust-default C0002).
+const OT_GROUP_MAP = {
+  collect: 'C002', // Performance (analytics)
+  personalize: 'C003', // Functional (Target)
+  marketing: 'C004', // Marketing
+  share: 'C008', // Targeted Advertising
+};
+
+function consentFromGroups(groups) {
+  return Object.fromEntries(
+    Object.entries(OT_GROUP_MAP).map(([purpose, group]) => [purpose, groups.includes(group)]),
+  );
+}
+
+// Read a prior consent decision from the OptanonConsent cookie (set by
+// OneTrust on telenet.be domains, incl. local.telenet.be). OneTrust itself
+// only loads with the Launch embed in the delayed phase (~3s after LCP), far
+// past the plugin's 1s personalization timeout, so returning visitors' consent
+// must be derived eagerly from the cookie. First visit: no cookie -> consent
+// stays 'pending' and the WebSDK queues events until the banner is answered.
+function getConsentFromCookie() {
+  const raw = document.cookie.split('; ').find((c) => c.startsWith('OptanonConsent='));
+  if (!raw) return null;
+  const groups = new URLSearchParams(decodeURIComponent(raw.slice(raw.indexOf('=') + 1))).get('groups');
+  if (!groups) return null;
+  // groups looks like "C001:1,C002:0,..." -> keep only the active ids.
+  const active = groups.split(',').filter((g) => g.endsWith(':1')).map((g) => g.split(':')[0]);
+  return consentFromGroups(active);
+}
+
+// Tests and DA author tooling must not fire analytics or load the WebSDK.
+function shouldSkipMartech() {
+  // eslint-disable-next-line no-underscore-dangle
+  if (window.__WTR_CONFIG__) return true; // @web/test-runner
+  const params = new URLSearchParams(window.location.search);
+  return params.has('quick-edit') || params.has('dapreview') || params.has('daexperiment');
+}
+
 // Open the OneTrust preference-center modal (loaded via Launch).
 function openCookiePreferences() {
   const ot = window.OneTrust || window.Optanon;
@@ -55,7 +101,73 @@ function initCookiePreferences() {
   });
 }
 
-export default function loadLaunch() {
+// loadPage() re-runs under DA Quick Edit / dapreview: memoize init and fire
+// the eager page-view only once per page lifetime.
+let initPromise = null;
+let eagerDone = false;
+
+/**
+ * Kicks off the martech stack (call at the top of loadEager). Resolves to the
+ * plugin module, or null when martech is skipped (tests / author tooling).
+ */
+export function loadMartech() {
+  if (initPromise) return initPromise;
   initCookiePreferences();
-  return loadScript(getLaunchScript(), { async: '' });
+  if (shouldSkipMartech()) {
+    initPromise = Promise.resolve(null);
+    return initPromise;
+  }
+  initPromise = (async () => {
+    // eslint-disable-next-line import/no-relative-packages
+    const martech = await import('../plugins/martech/src/index.js');
+    const consent = getConsentFromCookie();
+    const ready = martech.initMartech(
+      {
+        datastreamId: DATASTREAM_ID,
+        orgId: ORG_ID,
+      },
+      {
+        // NOTE: the Launch embed is NOT passed via launchUrls — the plugin
+        // loads those with a dynamic import(), a CORS module request that
+        // assets.adobedtm.com rejects on ported origins (breaks `aem up`
+        // local dev). runMartechDelayed() loads it as a classic script tag.
+        // Personalization is opt-in per page (a `Target` metadata key in DA)
+        // and needs a prior consent decision: a first-time visitor can't
+        // answer the (delayed) banner within the 1s personalization timeout.
+        personalization: !!getMetadata('target') && !!consent?.personalize,
+      },
+    );
+    // Returning visitors: apply the cookie-derived decision right away so the
+    // 'pending' event queue flushes without waiting for the delayed banner.
+    if (consent) martech.updateUserConsent(consent);
+    // Live banner changes: an OptanonWrapper rule in the Launch property
+    // dispatches `consent.onetrust` with the active group ids.
+    window.addEventListener('consent.onetrust', (e) => {
+      martech.updateUserConsent(consentFromGroups(e.detail || []));
+    });
+    await ready;
+    return martech;
+  })();
+  return initPromise;
+}
+
+export async function runMartechEager() {
+  if (eagerDone) return;
+  eagerDone = true;
+  const martech = await initPromise;
+  if (martech) await martech.martechEager();
+}
+
+export async function runMartechLazy() {
+  const martech = await initPromise;
+  if (martech) await martech.martechLazy();
+}
+
+export async function runMartechDelayed() {
+  const martech = await initPromise;
+  if (!martech) return;
+  martech.martechDelayed();
+  // Legacy Launch property (OneTrust / ContentSquare). Loaded as a classic
+  // script tag instead of the plugin's launchUrls (see note in loadMartech).
+  loadScript(getLaunchScript(), { async: '' });
 }

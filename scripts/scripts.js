@@ -14,7 +14,12 @@ import {
   toCamelCase,
 } from './aem.js';
 import { runExperimentation } from './experiment-loader.js';
-import loadLaunch from './martech.js';
+import {
+  loadMartech,
+  runMartechEager,
+  runMartechLazy,
+  runMartechDelayed,
+} from './martech.js';
 
 const experimentationConfig = {
   prodHost: 'main--telenet-document-authoring--bdhoine.aem.live',
@@ -175,6 +180,9 @@ export function decorateMain(main) {
  */
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
+  // Kick off the martech stack (WebSDK/ACDL via plugins/martech) right away;
+  // its eager phase is awaited alongside the first section below.
+  const martechLoaded = loadMartech();
   decorateTemplateAndTheme();
   await runExperimentation(doc, experimentationConfig);
   const main = doc.querySelector('main');
@@ -185,7 +193,10 @@ async function loadEager(doc) {
     // Quick Edit re-runs loadPage inside its iframe; the waitForFirstImage
     // optimization never resolves there and leaves the page blank, so skip it.
     const inQuickEdit = new URLSearchParams(window.location.search).has('quick-edit');
-    await loadSection(main.querySelector('.section'), inQuickEdit ? undefined : waitForFirstImage);
+    await Promise.all([
+      martechLoaded.then(runMartechEager),
+      loadSection(main.querySelector('.section'), inQuickEdit ? undefined : waitForFirstImage),
+    ]);
   }
 
   try {
@@ -223,9 +234,8 @@ async function loadLazy(doc) {
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
 
-  // Adobe Launch (tags) — lazy phase so the consent banner / tags surface
-  // promptly while staying off the critical render path.
-  loadLaunch();
+  // Analytics page-view reporting (aem-martech lazy phase).
+  await runMartechLazy();
 }
 
 /**
@@ -233,8 +243,13 @@ async function loadLazy(doc) {
  * without impacting the user experience.
  */
 function loadDelayed() {
-  // eslint-disable-next-line import/no-cycle
-  window.setTimeout(() => import('./delayed.js'), 3000);
+  window.setTimeout(() => {
+    // Loads the legacy Launch property (OneTrust / ContentSquare) via the
+    // plugin's launchUrls, plus any other non-essential martech tags.
+    runMartechDelayed();
+    // eslint-disable-next-line import/no-cycle
+    import('./delayed.js');
+  }, 3000);
   // load anything that can be postponed to the latest here
 }
 
